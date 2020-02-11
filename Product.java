@@ -6,6 +6,9 @@ public class Product implements Serializable
 	private String productID;
 	private String productName;
 	private List suppliedBy = new LinkedList();
+	private float buyPrice;
+	private List<float> salePrice;
+	private int currentStock;
 	
 	public Product(String id, String name)
 	{
