@@ -38,12 +38,12 @@ public class SupplierList implements Serializable
 
                 System.out.println("Input new ID for supplier: ");
                 System.out.print("-->");
-                input = scanner.next();
+                input = scanner.nextLine();
                 suppliers.get(i).setSupplierID(input);
 
                 System.out.println("Input new name for supplier: ");
                 System.out.print("-->");
-                input = scanner.next();
+                input = scanner.nextLine();
                 suppliers.get(i).setSupplierName(input);
                 found = true;
             }
