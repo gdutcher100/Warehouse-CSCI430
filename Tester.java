@@ -156,6 +156,8 @@ public class Tester
         }
     }
 	
+	
+	
 	// Saves the ProductList object to ProductListData file
     private static void saveProductList(ProductList productList)
     {
@@ -170,6 +172,76 @@ public class Tester
         }
     }
 	
+	// Adds a client into SupplierList
+    private static void addClient(ClientList clientList)
+    {
+        String cName;
+        String cID;
+        String input;
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("What is the ID of the client?");
+        System.out.print("-->");
+        input = scanner.next();
+        cID = input;
+
+        System.out.println("What is the name of the client?");
+        System.out.print("-->");
+        input = scanner.next();
+        cName = input;
+
+        Client cl = new Client(cID, cName);
+        clientList.insertClient(cl);
+        System.out.println("Client " + cl.getID() + " has been added.");
+    }
+	
+	// Loads client list from ClientListData file
+    private static ClientList loadClientList()
+    {
+        try {
+            FileInputStream file = new FileInputStream("SupplierListData");
+            ObjectInputStream input = new ObjectInputStream(file);
+            ClientList clientList = (ClientList) input.readObject(); 
+            input.close();
+            System.out.println("Client data successfully loaded.");
+
+            return clientList;
+        } catch(IOException ioe) {
+            ioe.printStackTrace();
+            return null;
+        } catch(ClassNotFoundException cnfe) {
+            cnfe.printStackTrace();
+            return null;
+        }
+    }
+	
+	// Saves the ClientList object to ClientListData file
+    private static void saveClientList(ClientList clientList)
+    {
+        try {
+            FileOutputStream file = new FileOutputStream("ClientListData");
+            ObjectOutputStream output = new ObjectOutputStream(file);
+            output.writeObject(clientList);
+            output.close();
+            System.out.println("Client data successfully saved.");
+        } catch(IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+	
+	// Prints out client information
+    private static void trackClientInformation(ClientList clientList)
+    {
+        System.out.println("List of clients:");
+
+        Iterator clients = clientList.getClients();
+        while (clients.hasNext())
+        {
+            System.out.println(clients.next());
+        }
+    }
+	
+	
     public static void main (String[] s) 
     {
         Scanner scanner = new Scanner(System.in);
@@ -177,6 +249,7 @@ public class Tester
         String input;
         SupplierList supplierList;
 		ProductList productList;
+		ClientList clientList;
 
         if (yesOrNo("Would you like to load the supplier list? (Y or N)"))
         {
@@ -201,6 +274,18 @@ public class Tester
             productList.insertProduct(p1);
             productList.insertProduct(p2);
         }
+		
+		if (yesOrNo("Would you like to load the client list? (Y or N)"))
+        {
+            clientList = loadClientList();
+        } else 
+        {
+            clientList = ClientList.instance();
+            Client c1 = new Client("01", "Client1");
+            Client c2 = new Client("02", "Client2");
+            clientList.insertClient(c1);
+            clientList.insertClient(c2);
+        }
 
         while (!quit)
         {
@@ -213,7 +298,11 @@ public class Tester
             System.out.println("6. Edit Product Information");
 			System.out.println("7. Add Product");
 			System.out.println("8. Save Product List");
-			System.out.println("9. Quit");
+			System.out.println("9. Track Client Information");
+            System.out.println("10. Edit Client Information");
+			System.out.println("11. Add Client");
+			System.out.println("12. Save Client List");
+			System.out.println("13. Quit");
 
             System.out.print("-->");
             input = scanner.next();
@@ -251,7 +340,22 @@ public class Tester
 			case "8":
 				saveProductList(productList);
 				break;
-            case "9":
+			case "9":
+				trackClientInformation(clientList);
+				break;
+			case "10":
+				System.out.println("Input the ID of the client you want to edit:");
+                System.out.print("-->");
+                input = scanner.next();
+                clientList.editClient(input);
+                break;
+			case "11":
+				addClient(clientList);
+				break;
+			case "12":
+				saveClientList(clientList);
+				break;
+            case "13":
                 quit = true;
                 break;
             }
