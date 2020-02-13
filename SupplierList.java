@@ -63,7 +63,7 @@ public class SupplierList implements Serializable
     }
 
     // Iterates through supplier list
-    public Iterator getSuppliers()
+    public Iterator<Supplier> getSuppliers()
     {
         return suppliers.iterator();
     }

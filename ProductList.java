@@ -64,7 +64,7 @@ public class ProductList implements Serializable
 	 }
 	 
 	 // iterates through product list
-	 public Iterator getProducts()
+	 public Iterator<Product> getProducts()
 	 {
 		 return products.iterator();
 	 }

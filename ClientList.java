@@ -64,7 +64,7 @@ public class ClientList implements Serializable
     }
 
     // Iterates through client list
-    public Iterator getClients()
+    public Iterator<Client> getClients()
     {
         return clients.iterator();
     }

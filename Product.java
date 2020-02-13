@@ -5,7 +5,7 @@ public class Product implements Serializable
 {
 	private String productID;
 	private String productName;
-	private List suppliedBy = new LinkedList();
+	private List<Supplier> suppliedBy = new LinkedList();
 	private float buyPrice;
 	private List<Float> salePrice;
 	private int currentStock;

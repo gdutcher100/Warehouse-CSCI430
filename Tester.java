@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
 
-public class Tester 
+public class Tester
 {
     public static String getToken(String prompt) 
     {
@@ -35,7 +35,7 @@ public class Tester
     {
         System.out.println("List of suppliers:");
 
-        Iterator suppliers = supplierList.getSuppliers();
+        Iterator<Supplier> suppliers = supplierList.getSuppliers();
         while (suppliers.hasNext())
         {
             System.out.println(suppliers.next());
@@ -67,11 +67,11 @@ public class Tester
 	
 	
 
-    // Loads supplier list from SupplierCatData file
+    // Loads supplier list from SupplierListData file
     private static SupplierList loadSupplierList()
     {
         try {
-            FileInputStream file = new FileInputStream("SupplierCatData");
+            FileInputStream file = new FileInputStream("SupplierListData");
             ObjectInputStream input = new ObjectInputStream(file);
             SupplierList supplierList = (SupplierList) input.readObject(); 
             input.close();
@@ -87,11 +87,11 @@ public class Tester
         }
     }
 
-    // Saves the SupplierList object to SupplierCatData file
+    // Saves the SupplierList object to SupplierListData file
     private static void saveSupplierList(SupplierList supplierList)
     {
         try {
-            FileOutputStream file = new FileOutputStream("SupplierCatData");
+            FileOutputStream file = new FileOutputStream("SupplierListData");
             ObjectOutputStream output = new ObjectOutputStream(file);
             output.writeObject(supplierList);
             output.close();
@@ -129,7 +129,7 @@ public class Tester
     {
         System.out.println("List of products:");
 
-        Iterator products = productList.getProducts();
+        Iterator<Product> products = productList.getProducts();
         while (products.hasNext())
         {
             System.out.println(products.next());
@@ -199,7 +199,7 @@ public class Tester
     private static ClientList loadClientList()
     {
         try {
-            FileInputStream file = new FileInputStream("SupplierListData");
+            FileInputStream file = new FileInputStream("ClientListData");
             ObjectInputStream input = new ObjectInputStream(file);
             ClientList clientList = (ClientList) input.readObject(); 
             input.close();
@@ -234,7 +234,7 @@ public class Tester
     {
         System.out.println("List of clients:");
 
-        Iterator clients = clientList.getClients();
+        Iterator<Client> clients = clientList.getClients();
         while (clients.hasNext())
         {
             System.out.println(clients.next());
