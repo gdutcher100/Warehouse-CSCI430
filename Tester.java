@@ -172,7 +172,7 @@ public class Tester
         }
     }
 	
-	// Adds a client into SupplierList
+	// Adds a client into ClientList
     private static void addClient(ClientList clientList)
     {
         String cName;
