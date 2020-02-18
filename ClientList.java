@@ -7,7 +7,7 @@ public class ClientList implements Serializable
     private List<Client> clients = new LinkedList();
     private static ClientList clientList;
 
-    private ClientList()
+    public ClientList()
     {
 
     }
@@ -23,37 +23,16 @@ public class ClientList implements Serializable
         }
     }
 
-    // Edits the client information
-    public void editClient(String id)
+    public Client getClient(String clientID)
     {
-        boolean found = false;
-
         for (int i = 0; i < clients.size(); i++)
         {
-            if (clients.get(i).getID().equals(id))
+            if (clients.get(i).getID().equals(clientID))
             {
-                String input;
-                Scanner scanner = new Scanner(System.in);
-
-                clients.get(i).toString();
-
-                System.out.println("Input new ID for client: ");
-                System.out.print("-->");
-                input = scanner.nextLine();
-                clients.get(i).setClientID(input);
-
-                System.out.println("Input new name for client: ");
-                System.out.print("-->");
-                input = scanner.nextLine();
-                clients.get(i).setClientName(input);
-                found = true;
+                return clients.get(i);
             }
         }
-
-        if (found == false)
-        {
-            System.out.println("Client not found.");
-        }
+        return null;
     }
 
     // Inserts client in list
