@@ -99,7 +99,9 @@ public class userInterface
 	private static void addProduct()
 	{
 		String pName;
-		String pID;
+        String pID;
+        float bPrice;
+        int currentStock;
 		String input;
 		Scanner scanner = new Scanner(System.in);
 		
@@ -113,7 +115,17 @@ public class userInterface
         input = scanner.nextLine();
         pName = input;
 
-        warehouse.addProduct(pID, pName);
+        System.out.println("What is the buy price of the product?");
+        System.out.print("-->");
+        input = scanner.nextLine();
+        bPrice = Float.parseFloat(input);
+
+        System.out.println("What is the quantity of the product?");
+        System.out.print("-->");
+        input = scanner.nextLine();
+        currentStock = Integer.parseInt(input);
+
+        warehouse.addProduct(pID, pName, bPrice, currentStock);
         System.out.println("Product " + pID + " has been added.");
     }
     
@@ -138,6 +150,95 @@ public class userInterface
         System.out.println("Client " + cID + " has been added.");
     }
 
+    // Has user input ID of the user's cart they want to view
+    private static void trackClientCart()
+    {
+        Scanner scanner = new Scanner(System.in);
+        String input;
+
+        System.out.println("Input ID of the client's cart you want to view: ");
+        System.out.print("-->");
+        input = scanner.nextLine();
+
+        warehouse.trackClientCart(input);
+    }
+
+    // Adds a product to the specified client's cart
+    private static void addProductToClientCart()
+    {
+        Scanner scanner = new Scanner(System.in);
+        String clientID;
+        String productID;
+        int quantity;
+
+        System.out.println("Input ID of the client's cart you want to add a product to: ");
+        System.out.print("-->");
+        clientID = scanner.nextLine();
+
+        System.out.println("Input ID of the product you want to the cart: ");
+        System.out.print("-->");
+        productID = scanner.nextLine();
+
+        System.out.println("Input quantity of the product: ");
+        System.out.print("-->");
+        quantity = Integer.parseInt(scanner.nextLine());
+
+        warehouse.addProductToClientCart(clientID, productID, quantity);
+    }
+
+    private static void placeOrder()
+    {
+        Scanner scanner = new Scanner(System.in);
+        String clientID;
+
+        System.out.println("Input ID of the client cart you want to place an order for: ");
+        System.out.print("-->");
+        clientID = scanner.nextLine();
+
+        warehouse.placeOrder(clientID);
+    }
+
+    private static void trackClientOrders()
+    {
+        Scanner scanner = new Scanner(System.in);
+        String clientID;
+
+        System.out.println("Input ID of the client's orders you want to view: ");
+        System.out.print("-->");
+        clientID = scanner.nextLine();
+
+        warehouse.trackClientOrder(clientID);
+    }
+
+    private static void acceptClientOrders()
+    {
+        Scanner scanner = new Scanner(System.in);
+        String clientID;
+
+        System.out.println("Input ID of the client's orders you want to accept: ");
+        System.out.print("-->");
+        clientID = scanner.nextLine();
+
+        warehouse.trackClientOrder(clientID);
+
+        warehouse.acceptOrder(clientID);
+        System.out.println(clientID + "\'s order has been accepted.");
+
+        warehouse.processOrder(clientID);
+    }
+
+    private static void viewClientInvoice()
+    {
+        Scanner scanner = new Scanner(System.in);
+        String clientID;
+
+        System.out.println("Input ID of the client's invoice(s) you want to view: ");
+        System.out.print("-->");
+        clientID = scanner.nextLine();
+
+        warehouse.viewClientInvoice(clientID);
+    }
+
     private static void loadLists() {
         if (warehouse.yesOrNo("Would you like to load the supplier list? (Y or N)")) {
             warehouse.loadSupplierListToUI();
@@ -149,8 +250,8 @@ public class userInterface
         if (warehouse.yesOrNo("Would you like to load the product list? (Y or N)")) {
             warehouse.loadProductListToUI();
         } else {
-            warehouse.insertProduct("01", "Product1");
-            warehouse.insertProduct("02", "Product2");
+            warehouse.insertProduct("01", "Product1", 5f, 7);
+            warehouse.insertProduct("02", "Product2", 18f, 3);
         }
 
         if (warehouse.yesOrNo("Would you like to load the client list? (Y or N)")) {
@@ -158,6 +259,7 @@ public class userInterface
         } else {
             warehouse.insertClient("01", "Client1");
             warehouse.insertClient("02", "Client2");
+            warehouse.addProductToClientCart("01", "01", 34);
         }
     }
 
@@ -182,7 +284,13 @@ public class userInterface
             System.out.println("10. Edit Client Information");
             System.out.println("11. Add Client");
             System.out.println("12. Save Client List");
-            System.out.println("13. Quit");
+            System.out.println("13. Track Client Cart");
+            System.out.println("14. Track Client Orders");
+            System.out.println("15. Add Product to Client Cart");
+            System.out.println("16. Place Order for Client");
+            System.out.println("17. Accept Client Orders");
+            System.out.println("18. View Client Invoice");
+            System.out.println("19. Quit");
 
             System.out.print("-->");
             input = scanner.next();
@@ -221,13 +329,31 @@ public class userInterface
                     break;
                 case "11":
                     addClient();
-				break;
-			case "12":
-				warehouse.saveClientList();
-				break;
-            case "13":
-                quit = true;
-                break;
+				    break;
+                case "12":
+                    warehouse.saveClientList();
+                    break;
+                case "13":
+                    trackClientCart();
+                    break;
+                case "14":
+                    trackClientOrders();
+                    break;
+                case "15":
+                    addProductToClientCart();
+                    break;
+                case "16":
+                    placeOrder();
+                    break;
+                case "17":
+                    acceptClientOrders();
+                    break;
+                case "18":
+                    viewClientInvoice();
+                    break;
+                case "19":
+                    quit = true;
+                    break;
             }
         }
         scanner.close();

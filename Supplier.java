@@ -3,9 +3,10 @@ import java.io.*;
 
 public class Supplier implements Serializable
 {
+    private static final long serialVersionUID = 1L;
     private String supplierID;
     private String supplierName;
-    private List sellsProduct = new LinkedList();
+    private List<Product> sellsProduct = new LinkedList<Product>();
 
     public Supplier(String supplierID, String supplierName)
     {

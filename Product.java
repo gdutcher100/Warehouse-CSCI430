@@ -3,17 +3,22 @@ import java.io.*;
 
 public class Product implements Serializable
 {
+	private static final long serialVersionUID = 1L;
 	private String productID;
 	private String productName;
-	private List<Supplier> suppliedBy = new LinkedList();
+	private List<Supplier> suppliedBy = new LinkedList<Supplier>();
 	private float buyPrice;
 	private List<Float> salePrice;
 	private int currentStock;
+	private int quantity;
 	
-	public Product(String id, String name)
+	public Product(String id, String name, float buyPrice, int currentStock)
 	{
 		this.productID = id;
 		this.productName = name;
+		this.buyPrice = buyPrice;
+		this.currentStock = currentStock;
+		this.quantity = 0;
 	}
 	
 	public void setProductName(String newName)
@@ -25,6 +30,14 @@ public class Product implements Serializable
 	{
 		this.productID = newID;
 	}
+
+	public void setCurrentStock(int currentStock) {
+		this.currentStock = currentStock;
+	}
+
+	public void setBuyPrice(float buyPrice) {
+		this.buyPrice = buyPrice;
+	}
 	
 	public String getID()
 	{
@@ -35,9 +48,28 @@ public class Product implements Serializable
 	{
 		return productName;
 	}
+
+	public int getQuantity()
+	{
+		return quantity;
+	}
+
+	public float getBuyPrice() {
+		return buyPrice;
+	}
+
+	public int getCurrentStock() {
+		return currentStock;
+	}
 	
+	public void setQuantity(int quantity)
+	{
+		this.quantity = quantity;
+	}
+
 	public String toString()
 	{
-		return "ID: " + productID + " Name: " + productName;
+		return "ID: " + productID + " Name: " + productName + " Buy Price: " + 
+		buyPrice + " Current Stock: " + currentStock + " Quantity: " + quantity;
 	}
 }

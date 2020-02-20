@@ -25,6 +25,22 @@ public class Warehouse
 		} while (true);
     }
 
+    private static Object deepCopy(Object object) 
+    {
+        try {
+          ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+          ObjectOutputStream outputStrm = new ObjectOutputStream(outputStream);
+          outputStrm.writeObject(object);
+          ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+          ObjectInputStream objInputStream = new ObjectInputStream(inputStream);
+          return objInputStream.readObject();
+        }
+        catch (Exception e) {
+          e.printStackTrace();
+          return null;
+        }
+    }
+
     // Returns true if yes, false if no
     public boolean yesOrNo(String prompt) 
     {
@@ -113,9 +129,9 @@ public class Warehouse
     }
 
 	// Add a product to productList
-	public void addProduct(String pID, String pName)
+	public void addProduct(String pID, String pName, float buyPrice, int currentStock)
 	{
-		Product prod = new Product(pID, pName);
+		Product prod = new Product(pID, pName, buyPrice, currentStock);
 		productList.insertProduct(prod);
 	}
 	
@@ -129,6 +145,11 @@ public class Warehouse
         {
             System.out.println(products.next());
         }
+    }
+
+    public void addToCart(String clientID, int quantity, Product product)
+    {
+        clientList.getClient(clientID).addToCart(product, quantity);;
     }
 	
 	 // Loads product list from ProductListData file
@@ -157,11 +178,11 @@ public class Warehouse
     }
 
     // Inserts a product into the ProductList
-    public void insertProduct(String productID, String productName)
+    public void insertProduct(String productID, String productName, float buyPrice, int currentStock)
     {
         try
         {
-            Product product = new Product(productID, productName);
+            Product product = new Product(productID, productName, buyPrice, currentStock);
             productList.insertProduct(product);
         } catch (NullPointerException npe) {
             System.out.println(npe);
@@ -259,6 +280,94 @@ public class Warehouse
         while (clients.hasNext())
         {
             System.out.println(clients.next());
+        }
+    }
+
+    // Prints contents of client's cart
+    public void trackClientCart(String clientID)
+    {
+        if (clientList.getClient(clientID).getShoppingCart().getStatus() == "NULL")
+        {
+            System.out.println("List of products in cart:");
+
+            Iterator<Product> products = clientList.getClient(clientID).getCartContents();
+            while (products.hasNext())
+            {
+                System.out.println(products.next());
+            }
+        }
+    }
+
+    // Prints contents of client's order
+    public void trackClientOrder(String clientID)
+    {
+        if (clientList.getClient(clientID).getOrders().getStatus() == "IN_PROGRESS")
+        {
+            System.out.println("List of products in order:");
+
+            Iterator<Product> products = clientList.getClient(clientID).getOrderContents();
+            while (products.hasNext())
+            {
+                System.out.println(products.next());
+            }
+        }
+    }
+
+    public void addProductToClientCart(String clientID, String productID, int quantity)
+    {
+        Product product = (Product) deepCopy(productList.getProduct(productID));
+        clientList.getClient(clientID).addToCart(product, quantity);;
+    }
+
+    public void placeOrder(String clientID)
+    {
+        clientList.getClient(clientID).placeOrder();
+    }
+
+    public void acceptOrder(String clientID)
+    {
+        clientList.getClient(clientID).acceptOrder();
+    }
+
+    public void viewClientInvoice(String clientID)
+    {
+        for (int i = 0; i < clientList.getClient(clientID).getInvoiceList().size(); i++)
+        {
+            System.out.println(clientList.getClient(clientID).getInvoiceList().get(i));
+        }
+    }
+
+    public void processOrder(String clientID)
+    {
+        boolean successful = true;
+
+        if (clientList.getClient(clientID).getOrders().status.toString() == "ACCEPTED")
+        {
+            for (int i = 0; i < clientList.getClient(clientID).getOrders().getSize(); i++)
+            {
+                if (clientList.getClient(clientID).getOrders().getCurrentStock(i) < clientList.getClient(clientID).getOrders().getQuantity(i))
+                {
+                    System.out.println("Cannot be processed because of insufficient stock, putting order on waitlist.");
+                    // Put on waitlist
+
+                    successful = false;
+                    break;
+                }
+            }
+
+            if (successful == true)
+            {
+                for (int i = 0; i < clientList.getClient(clientID).getOrders().getSize(); i++)
+                {
+                    String productID = clientList.getClient(clientID).getOrders().getProductID(i);
+                    int remainingQuantity = productList.getProduct(productID).getCurrentStock() - clientList.getClient(clientID).getOrders().getQuantity(i);
+
+                    productList.getProduct(productID).setCurrentStock(remainingQuantity);
+
+                    // Generate invoice
+                    clientList.getClient(clientID).generateInvoice();
+                }
+            }
         }
     }
 }

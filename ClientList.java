@@ -4,7 +4,7 @@ import java.io.*;
 public class ClientList implements Serializable
 {
     private static final long serialVersionUID = 1L;
-    private List<Client> clients = new LinkedList();
+    private List<Client> clients = new LinkedList<Client>();
     private static ClientList clientList;
 
     public ClientList()
@@ -50,6 +50,6 @@ public class ClientList implements Serializable
 
     public String toString() 
     {
-    return clients.toString();
+        return clients.toString();
     }
 }

@@ -1,10 +1,10 @@
-import java.util.*;
+ import java.util.*;
 import java.io.*;
 
 public class ProductList implements Serializable
 {
 	 private static final long serialVersionUID = 1L;
-	 private List<Product> products = new LinkedList();
+	 private List<Product> products = new LinkedList<Product>();
 	 private static ProductList productList;
 	 
 	 public ProductList()
