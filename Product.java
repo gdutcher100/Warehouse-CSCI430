@@ -11,6 +11,8 @@ public class Product implements Serializable
 	private List<Float> salePrice;
 	private int currentStock;
 	private int quantity;
+	private List<Waitlist> waitlistedClients = new LinkedList<Waitlist>();
+
 	
 	public Product(String id, String name, float buyPrice, int currentStock)
 	{
@@ -53,6 +55,16 @@ public class Product implements Serializable
 	{
 		return quantity;
 	}
+	
+	//waitlist
+	public Iterator<Waitlist> getWaitlistedClients()
+    {
+      return waitlistedClients.iterator();
+    }
+	
+	public boolean addToWaitlist(Waitlist w){
+      return waitlistedClients.add(w);
+  	}
 
 	public float getBuyPrice() {
 		return buyPrice;

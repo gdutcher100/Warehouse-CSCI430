@@ -336,6 +336,32 @@ public class Warehouse
             System.out.println(clientList.getClient(clientID).getInvoiceList().get(i));
         }
     }
+	
+	//adds products and clients to waitlist
+	public void addToWaitlist(String clientID, String productID, int quantity) 
+	{
+		Product product = productList.getProduct(productID);
+		Client client = clientList.getClient(clientID);
+		
+		Waitlist waitlist = new Waitlist(client, product, quantity);
+		product.addToWaitlist(waitlist);
+		client.addToWaitlist(waitlist);
+		System.out.println("Waitlist updated");
+	}
+	
+	//get a list of all clients with outstanding balances
+	public String getOutstandingBalances() 
+	{
+		Iterator clients = clientList.getClients();
+		String clientBalance = "";
+		while(clients.hasNext()) {
+		  Client client = (Client)(clients.next());
+		if(client.getTotalCost() > 0.0) {
+			clientBalance += client.toString() + "\n";
+		  }
+		}
+		return clientBalance;
+	}
 
     public void processOrder(String clientID)
     {
@@ -348,8 +374,13 @@ public class Warehouse
                 if (clientList.getClient(clientID).getOrders().getCurrentStock(i) < clientList.getClient(clientID).getOrders().getQuantity(i))
                 {
                     System.out.println("Cannot be processed because of insufficient stock, putting order on waitlist.");
-                    // Put on waitlist
-
+                    
+					// Put on waitlist
+					int quantity = clientList.getClient(clientID).getOrders().getQuantity(i);
+					String productID = clientList.getClient(clientID).getOrders().getProductID(i);
+					addToWaitlist(clientID, productID, quantity);
+					System.out.println("Waitlist updated");
+					
                     successful = false;
                     break;
                 }

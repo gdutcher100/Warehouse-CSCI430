@@ -9,6 +9,7 @@ public class Client implements Serializable
     private ShoppingCart shoppingCart = new ShoppingCart();
     private ShoppingCart order = new ShoppingCart();
     private List<String> invoice = new LinkedList<String>();
+	private List<Waitlist> waitlistedProducts = new LinkedList<Waitlist>();
 
     private static Object deepCopy(Object object) 
     {
@@ -93,8 +94,36 @@ public class Client implements Serializable
     {
         order.acceptOrder();
     }
+	
+	//add to waitlist
+	public boolean addToWaitlist(Waitlist wlo)
+	{
+		return waitlistedProducts.add(wlo);
+	}
+	
+	//get waitlist
+	public Iterator<Waitlist> getWaitlistedProducts()
+	{
+		return waitlistedProducts.iterator();
+	}
+	
+	//search on waitlist
+	public Waitlist searchWaitListOnProduct(Product p)
+	{
+		Iterator<Waitlist> iterator = waitlistedProducts.iterator();
+		Waitlist w;
+		while (iterator.hasNext())
+		{
+			w = iterator.next();
+			if (w.getProduct() == p)
+			{
+				return w;
+			}
+		}
+		return null;
+	}
 
-    private float getTotalCost()
+    public float getTotalCost()
     {
         float totalCost = 0f;
 
