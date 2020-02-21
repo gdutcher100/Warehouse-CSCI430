@@ -346,13 +346,24 @@ public class Warehouse
 		return clientList.getClient(cID);
 	}
 	
+	// adds new suppplier to list of suppliers of the product
 	public void addToSellingSuppliers(String productID, String supplierID, float price) {
 		Product product = productList.getProduct(productID);
 		Supplier supplier = supplierList.getSupplier(supplierID);
 		
-		SoldBy seller = new SoldBy(product, supplier, price);
+		SoldBy seller = new SoldBy(supplier, price);
 		product.addToSellingSuppliers(seller);
-		System.out.println("Seller for " + product.getName() + " updated.");
+	}
+	
+	public void trackProductSellers(String productId) {
+		System.out.println("List of sellers for product " + productId);
+		
+		Product product = productList.getProduct(productId);
+		Iterator<SoldBy> sellers = product.getSellers();
+		
+		while (sellers.hasNext()) {
+			System.out.println(sellers.next());
+		}
 	}
 	
 	//adds products and clients to waitlist

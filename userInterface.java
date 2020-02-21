@@ -47,7 +47,7 @@ public class userInterface
         Scanner scanner = new Scanner(System.in);
 
 
-        System.out.println("Input old ID of the client you want to edit: ");
+        System.out.println("Input ID of the client you want to edit: ");
         System.out.print("-->");
         ID = scanner.nextLine();
 
@@ -103,11 +103,39 @@ public class userInterface
     }
 	// Adds a supplier to the SoldBy list of a product
     private static void addProductSeller() {
+		String productId;
+		String supplierId;
+		float buyPrice;
+		String input;
+		Scanner scanner = new Scanner(System.in);
 		
+		System.out.println("Enter the ID of the product for which there is a new Supplier. ");
+		System.out.print("-->");
+		productId = scanner.nextLine();
+		
+		System.out.println("Enter the ID of the Supplier that now sells the product.");
+		System.out.print("-->");
+		supplierId = scanner.nextLine();
+		
+		System.out.println("Enter the purchase price of the product from this supplier.");
+		System.out.print("-->");
+		input = scanner.nextLine();
+		buyPrice = Float.parseFloat(input);
+		
+		warehouse.addToSellingSuppliers(productId, supplierId, buyPrice);	
+		System.out.println("Seller for product " + productId + " updated.");
 	}
+	
 	// Displays SoldBy information for a specific seller
 	private static void trackProductSellers() {
+		String productId;
+		Scanner scanner = new Scanner(System.in);
 		
+		System.out.println("Enter the ID of the product whose sellers you wish to display.");
+		System.out.print("-->");
+		productId = scanner.nextLine();
+		
+		warehouse.trackProductSellers(productId);
 	}
 	
     // Adds a client into ClientList

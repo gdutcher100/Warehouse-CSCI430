@@ -61,6 +61,10 @@ public class Product implements Serializable
 		return sellingSuppliers.add(s);
 	}
 	
+	public Iterator<SoldBy> getSellers() {
+		return sellingSuppliers.iterator();
+	}
+	
 	public boolean addToWaitlist(Waitlist w){
       return waitlistedClients.add(w);
   	}

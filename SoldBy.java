@@ -4,18 +4,12 @@ import java.lang.*;
 
 public class SoldBy implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private Product product;
 	private Supplier supplier;
 	private float buyPrice;
 	
-	public SoldBy(Product p, Supplier s, float price) {
-		this.product = p;
+	public SoldBy(Supplier s, float price) {
 		this.supplier = s;
 		this.buyPrice = price;
-	}
-	
-	public Product getProduct() {
-		return product;
 	}
 	
 	public Supplier getSupplier() {
