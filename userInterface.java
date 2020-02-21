@@ -6,109 +6,82 @@ public class userInterface
 
     private static void editSupplier()
     {
-        String oldID;
-        String newID;
+        String ID;
         String newName;
         Scanner scanner = new Scanner(System.in);
 
 
-        System.out.println("Input old ID of the supplier you want to edit: ");
+        System.out.println("Input ID of the supplier you want to edit: ");
         System.out.print("-->");
-        oldID = scanner.nextLine();
-
-        System.out.println("Input new ID for supplier: ");
-        System.out.print("-->");
-        newID = scanner.nextLine();
+        ID = scanner.nextLine();
 
         System.out.println("Input new name for supplier: ");
         System.out.print("-->");
         newName = scanner.nextLine();
 
-        warehouse.editSupplier(oldID, newID, newName);
+        warehouse.editSupplier(ID, newName);
     }
 
     private static void editProduct()
     {
-        String oldID;
-        String newID;
+        String ID;
         String newName;
         Scanner scanner = new Scanner(System.in);
 
 
-        System.out.println("Input old ID of the product you want to edit: ");
+        System.out.println("Input ID of the product you want to edit: ");
         System.out.print("-->");
-        oldID = scanner.nextLine();
-
-        System.out.println("Input new ID for product: ");
-        System.out.print("-->");
-        newID = scanner.nextLine();
+        ID = scanner.nextLine();
 
         System.out.println("Input new name for product: ");
         System.out.print("-->");
         newName = scanner.nextLine();
 
-        warehouse.editProduct(oldID, newID, newName);
+        warehouse.editProduct(ID, newName);
     }
 
     private static void editClient()
     {
-        String oldID;
-        String newID;
+        String ID;
         String newName;
         Scanner scanner = new Scanner(System.in);
 
 
         System.out.println("Input old ID of the client you want to edit: ");
         System.out.print("-->");
-        oldID = scanner.nextLine();
-
-        System.out.println("Input new ID for client: ");
-        System.out.print("-->");
-        newID = scanner.nextLine();
+        ID = scanner.nextLine();
 
         System.out.println("Input new name for client: ");
         System.out.print("-->");
         newName = scanner.nextLine();
 
-        warehouse.editClient(oldID, newID, newName);
+        warehouse.editClient(ID, newName);
     }
 
     // Adds a supplier to the supplierList
     private static void addSupplier()
     {
         String sName;
-        String sID;
         String input;
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("What is the ID of the supplier?");
-        System.out.print("-->");
-        input = scanner.next();
-        sID = input;
-
         System.out.println("What is the name of the supplier?");
         System.out.print("-->");
-        input = scanner.next();
+        input = scanner.nextLine();
         sName = input;
 
-        warehouse.addSupplier(sID, sName);
-        System.out.println("Supplier " + sID + " has been added.");
+        warehouse.addSupplier(sName);
+        System.out.println("Supplier " + sName + " has been added.");
     }
 
     // Add a product to productList
 	private static void addProduct()
 	{
 		String pName;
-        String pID;
         float bPrice;
         int currentStock;
 		String input;
 		Scanner scanner = new Scanner(System.in);
-		
-		System.out.println("What is the ID of the product?");
-        System.out.print("-->");
-        input = scanner.nextLine();
-        pID = input;
 		
 		System.out.println("What is the name of the product?");
         System.out.print("-->");
@@ -125,29 +98,31 @@ public class userInterface
         input = scanner.nextLine();
         currentStock = Integer.parseInt(input);
 
-        warehouse.addProduct(pID, pName, bPrice, currentStock);
-        System.out.println("Product " + pID + " has been added.");
+        warehouse.addProduct(pName, bPrice, currentStock);
+        System.out.println("Product " + pName + " has been added.");
     }
-    
+	// Adds a supplier to the SoldBy list of a product
+    private static void addProductSeller() {
+		
+	}
+	// Displays SoldBy information for a specific seller
+	private static void trackProductSellers() {
+		
+	}
+	
     // Adds a client into ClientList
     private static void addClient() {
         String cName;
-        String cID;
         String input;
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("What is the ID of the client?");
-        System.out.print("-->");
-        input = scanner.next();
-        cID = input;
-
         System.out.println("What is the name of the client?");
         System.out.print("-->");
-        input = scanner.next();
+        input = scanner.nextLine();
         cName = input;
 
-        warehouse.addClient(cID, cName);
-        System.out.println("Client " + cID + " has been added.");
+        warehouse.addClient(cName);
+        System.out.println("Client " + cName + " has been added.");
     }
 
     // Has user input ID of the user's cart they want to view
@@ -243,23 +218,23 @@ public class userInterface
         if (warehouse.yesOrNo("Would you like to load the supplier list? (Y or N)")) {
             warehouse.loadSupplierListToUI();
         } else {
-            warehouse.insertSupplier("01", "Supplier1");
-            warehouse.insertSupplier("02", "Supplier2");
+            warehouse.insertSupplier("Supplier1");
+            warehouse.insertSupplier("Supplier2");
         }
 
         if (warehouse.yesOrNo("Would you like to load the product list? (Y or N)")) {
             warehouse.loadProductListToUI();
         } else {
-            warehouse.insertProduct("01", "Product1", 5f, 7);
-            warehouse.insertProduct("02", "Product2", 18f, 3);
+            warehouse.insertProduct("Product1", 5f, 7);
+            warehouse.insertProduct("Product2", 18f, 3);
         }
 
         if (warehouse.yesOrNo("Would you like to load the client list? (Y or N)")) {
             warehouse.loadClientListToUI();
         } else {
-            warehouse.insertClient("01", "Client1");
-            warehouse.insertClient("02", "Client2");
-            warehouse.addProductToClientCart("01", "01", 34);
+            warehouse.insertClient("Client1");
+            warehouse.insertClient("Client2");
+            //warehouse.addProductToClientCart("01", "01", 34);
         }
     }
 	
@@ -285,7 +260,7 @@ public class userInterface
 		}
 		System.out.println("---------------------------------\n");
 	}
-
+	
 	//waitlist of products for a client
 	public static void getWaitlistForClients()
 	{
@@ -325,21 +300,23 @@ public class userInterface
             System.out.println("5. Track Product Information");
             System.out.println("6. Edit Product Information");
             System.out.println("7. Add Product");
-            System.out.println("8. Save Product List");
-            System.out.println("9. Track Client Information");
-            System.out.println("10. Edit Client Information");
-            System.out.println("11. Add Client");
-            System.out.println("12. Save Client List");
-            System.out.println("13. Track Client Cart");
-            System.out.println("14. Track Client Orders");
-            System.out.println("15. Add Product to Client Cart");
-            System.out.println("16. Place Order for Client");
-            System.out.println("17. Accept Client Orders");
-            System.out.println("18. View Client Invoice");
-			System.out.println("19. List all clients with outstanding balance");
-			System.out.println("20. View waitlist of products for a client");
-			System.out.println("21. View waitlist of clients for a product");
-            System.out.println("22. Quit");
+			System.out.println("8. Add Seller for a Product");
+			System.out.println("9. View all Sellers for a Product");
+            System.out.println("10. Save Product List");
+            System.out.println("11. Track Client Information");
+            System.out.println("12. Edit Client Information");
+            System.out.println("13. Add Client");
+            System.out.println("14. Save Client List");
+            System.out.println("15. Track Client Cart");
+            System.out.println("16. Track Client Orders");
+            System.out.println("17. Add Product to Client Cart");
+            System.out.println("18. Place Order for Client");
+            System.out.println("19. Accept Client Orders");
+            System.out.println("20. View Client Invoice");
+			System.out.println("21. List all clients with outstanding balance");
+			System.out.println("22. View waitlist of products for a client");
+			System.out.println("23. View waitlist of clients for a product");
+            System.out.println("24. Quit");
 
             System.out.print("-->");
             input = scanner.next();
@@ -367,49 +344,55 @@ public class userInterface
                 case "7":
                     addProduct();
                     break;
-                case "8":
+				case "8":
+					addProductSeller();
+					break;
+				case "9":
+					trackProductSellers();
+					break;
+                case "10":
                     warehouse.saveProductList();
                     break;
-                case "9":
+                case "11":
                     warehouse.trackClientInformation();
                     break;
-                case "10":
+                case "12":
                     editClient();
                     break;
-                case "11":
+                case "13":
                     addClient();
 				    break;
-                case "12":
+                case "14":
                     warehouse.saveClientList();
                     break;
-                case "13":
+                case "15":
                     trackClientCart();
                     break;
-                case "14":
+                case "16":
                     trackClientOrders();
                     break;
-                case "15":
+                case "17":
                     addProductToClientCart();
                     break;
-                case "16":
+                case "18":
                     placeOrder();
                     break;
-                case "17":
+                case "19":
                     acceptClientOrders();
                     break;
-                case "18":
+                case "20":
                     viewClientInvoice();
                     break;
-                case "19":
+				case "21":
                     warehouse.getOutstandingBalances();
                     break;
-				case "20":
+				case "22":
 					getWaitlistForClients();
 					break;
-				case "21":
+				case "23":
 					getWaitlistForProducts();
 					break;
-				case "22":
+                case "24":
                     quit = true;
                     break;
             }

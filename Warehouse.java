@@ -64,9 +64,9 @@ public class Warehouse
     }
 
     // Adds a supplier into SupplierList
-    public void addSupplier(String sID, String sName)
+    public void addSupplier(String sName)
     {
-        Supplier sX = new Supplier(sID, sName);
+        Supplier sX = new Supplier(sName);
         supplierList.insertSupplier(sX);
     }
 	
@@ -95,11 +95,11 @@ public class Warehouse
         supplierList = loadSupplierList();
     }
 
-    public void insertSupplier(String supplierID, String supplierName)
+    public void insertSupplier(String supplierName)
     {
         try
         {
-            Supplier supplier = new Supplier(supplierID, supplierName);
+            Supplier supplier = new Supplier(supplierName);
             supplierList.insertSupplier(supplier);
         } catch (NullPointerException npe) {
             System.out.println(npe);
@@ -107,10 +107,9 @@ public class Warehouse
         }
     }
 
-    public void editSupplier(String oldSupplierID, String supplierID, String supplierName)
+    public void editSupplier(String supplierID, String supplierName)
     {
-        Supplier supplier = supplierList.getSupplier(oldSupplierID);
-        supplier.setSupplierID(supplierID);
+        Supplier supplier = supplierList.getSupplier(supplierID);
         supplier.setSupplierName(supplierName);
     }
 
@@ -129,9 +128,9 @@ public class Warehouse
     }
 
 	// Add a product to productList
-	public void addProduct(String pID, String pName, float buyPrice, int currentStock)
+	public void addProduct(String pName, float buyPrice, int currentStock)
 	{
-		Product prod = new Product(pID, pName, buyPrice, currentStock);
+		Product prod = new Product(pName, buyPrice, currentStock);
 		productList.insertProduct(prod);
 	}
 	
@@ -178,11 +177,11 @@ public class Warehouse
     }
 
     // Inserts a product into the ProductList
-    public void insertProduct(String productID, String productName, float buyPrice, int currentStock)
+    public void insertProduct(String productName, float buyPrice, int currentStock)
     {
         try
         {
-            Product product = new Product(productID, productName, buyPrice, currentStock);
+            Product product = new Product(productName, buyPrice, currentStock);
             productList.insertProduct(product);
         } catch (NullPointerException npe) {
             System.out.println(npe);
@@ -190,10 +189,9 @@ public class Warehouse
         }
     }
 
-    public void editProduct(String oldProductID, String productID, String productName)
+    public void editProduct(String ProductID, String productName)
     {
-        Product product = productList.getProduct(oldProductID);
-        product.setProductID(productID);
+        Product product = productList.getProduct(ProductID);
         product.setProductName(productName);
     }
 	
@@ -212,9 +210,9 @@ public class Warehouse
     }
 	
 	// Adds a client into ClientList
-    public void addClient(String cID, String cName)
+    public void addClient(String cName)
     {
-        Client cl = new Client(cID, cName);
+        Client cl = new Client(cName);
         clientList.insertClient(cl);
     }
 	
@@ -244,16 +242,15 @@ public class Warehouse
     }
 
     
-    public void insertClient(String clientID, String clientName)
+    public void insertClient(String clientName)
     {
-        Client client = new Client(clientID, clientName);
+        Client client = new Client(clientName);
         clientList.insertClient(client);
     }
 
-    public void editClient(String oldClientID, String clientID, String clientName)
+    public void editClient(String clientID, String clientName)
     {
-        Client client = clientList.getClient(oldClientID);
-        client.setClientID(clientID);
+        Client client = clientList.getClient(clientID);
         client.setClientName(clientName);
     }
 	
@@ -349,6 +346,15 @@ public class Warehouse
 		return clientList.getClient(cID);
 	}
 	
+	public void addToSellingSuppliers(String productID, String supplierID, float price) {
+		Product product = productList.getProduct(productID);
+		Supplier supplier = supplierList.getSupplier(supplierID);
+		
+		SoldBy seller = new SoldBy(product, supplier, price);
+		product.addToSellingSuppliers(seller);
+		System.out.println("Seller for " + product.getName() + " updated.");
+	}
+	
 	//adds products and clients to waitlist
 	public void addToWaitlist(String clientID, String productID, int quantity) 
 	{
@@ -362,15 +368,15 @@ public class Warehouse
 	}
 	
 	public Iterator getWaitlistedProducts(String clientID)
-  {
-    return clientList.getClient(clientID).getWaitlistedProducts();
-  }
+	{
+		return clientList.getClient(clientID).getWaitlistedProducts();
+	}
   
-  public Iterator getWaitlistedClients(String productID)
-  {
-    return productList.getProduct(productID).getWaitlistedClients();
-  }
-	
+	public Iterator getWaitlistedClients(String productID)
+	{
+		return productList.getProduct(productID).getWaitlistedClients();
+	}
+  
 	//get a list of all clients with outstanding balances
 	public String getOutstandingBalances() 
 	{
@@ -398,11 +404,11 @@ public class Warehouse
                     System.out.println("Cannot be processed because of insufficient stock, putting order on waitlist.");
                     
 					// Put on waitlist
+					int quantity = clientList.getClient(clientID).getOrders().getQuantity(i);
 					String productID = clientList.getClient(clientID).getOrders().getProductID(i);
-					int quantity = productList.getProduct(productID).getCurrentStock();
 					addToWaitlist(clientID, productID, quantity);
-					System.out.println("Waitlist updated for client "+clientID);
-	
+					System.out.println("Waitlist updated");
+					
                     successful = false;
                     break;
                 }
