@@ -4,6 +4,7 @@ import java.io.*;
 public class Client implements Serializable
 {
     private static final long serialVersionUID = 1L;
+    private static final String CLIENT_STRING = "S";
     private String clientID;
     private String clientName;
     private ShoppingCart shoppingCart = new ShoppingCart();
@@ -27,9 +28,9 @@ public class Client implements Serializable
         }
     }
 
-    public Client(String clientID, String clientName)
+    public Client(String clientName)
     {
-        this.clientID = clientID;
+        clientID = CLIENT_STRING + (IDServer.instance()).getID();
         this.clientName = clientName;
     }
 
