@@ -262,6 +262,52 @@ public class userInterface
             warehouse.addProductToClientCart("01", "01", 34);
         }
     }
+	
+	//waitlist of clients for a product
+	public static void getWaitlistForProducts()
+	{
+		String pID = warehouse.getToken("Enter product ID: ");
+		Product p = warehouse.searchProduct(pID);
+		int i = 1;
+		if (p == null)
+		{
+		  System.out.println("Product doesn't exist");
+		  return;
+		}
+		Iterator waitlist = warehouse.getWaitlistedClients(pID);
+		Object w;
+		System.out.println("---------------------------------");
+		while (waitlist.hasNext())
+		{
+		  w = waitlist.next();
+		  System.out.println(i + ".) Client: " + w);
+		  i++;
+		}
+		System.out.println("---------------------------------\n");
+	}
+
+	//waitlist of products for a client
+	public static void getWaitlistForClients()
+	{
+		String cID = warehouse.getToken("Enter client ID: ");
+		Client c = warehouse.searchClient(cID);
+		int i = 1;
+		if (c == null)
+		{
+		  System.out.println("Client doesn't exist");
+		  return;
+		}
+		Iterator waitlist = warehouse.getWaitlistedProducts(cID);
+		Object w;
+		System.out.println("---------------------------------");
+		while (waitlist.hasNext())
+		{
+		  w = waitlist.next();
+		  System.out.println(i + ".) Product: " + w);
+		  i++;
+		}
+		System.out.println("---------------------------------\n");
+	}
 
     public static void main(String[] s) {
         Scanner scanner = new Scanner(System.in);
@@ -290,7 +336,10 @@ public class userInterface
             System.out.println("16. Place Order for Client");
             System.out.println("17. Accept Client Orders");
             System.out.println("18. View Client Invoice");
-            System.out.println("19. Quit");
+			System.out.println("19. List all clients with outstanding balance");
+			System.out.println("20. View waitlist of products for a client");
+			System.out.println("21. View waitlist of clients for a product");
+            System.out.println("22. Quit");
 
             System.out.print("-->");
             input = scanner.next();
@@ -352,6 +401,15 @@ public class userInterface
                     viewClientInvoice();
                     break;
                 case "19":
+                    warehouse.getOutstandingBalances();
+                    break;
+				case "20":
+					getWaitlistForClients();
+					break;
+				case "21":
+					getWaitlistForProducts();
+					break;
+				case "22":
                     quit = true;
                     break;
             }

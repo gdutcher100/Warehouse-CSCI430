@@ -23,7 +23,7 @@ public class ProductList implements Serializable
 	 }
 	 
 
-	// Returns the specified supplier by ID
+	// Returns the specified product by ID
 	public Product getProduct(String productID)
 	{
 		for (int i = 0; i < products.size(); i++)
@@ -48,6 +48,17 @@ public class ProductList implements Serializable
 	 {
 		 return products.iterator();
 	 }
+	 
+	 // public Product search(String productID) 
+	 // {
+        // for (Iterator iterator = products.iterator(); iterator.hasNext(); ) {
+            // Product product = (Product) iterator.next();
+            // if (product.getID().equals(productID)) {
+                // return product;
+            // }
+        // }
+        // return null;
+    // }
 	 
 	 public String toString()
 	 {
