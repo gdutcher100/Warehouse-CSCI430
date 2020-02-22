@@ -59,6 +59,30 @@ public class ShoppingCart implements Serializable
         return inCart.get(i).getQuantity();
     }
 
+    public boolean verifyProductExists(String productID)
+    {
+        for (int i = 0; i < inCart.size(); i++)
+        {
+            if (productID.equals(inCart.get(i).getID()))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void setQuantity(String productID, int quantity)
+    {
+        for (int i = 0; i < inCart.size(); i++)
+        {
+            if (productID.equals(inCart.get(i).getID()))
+            {
+                inCart.get(i).setQuantity(quantity);
+            }
+        }
+    }
+
     public void clearCart()
     {
         inCart.clear();
@@ -100,5 +124,16 @@ public class ShoppingCart implements Serializable
     {
         if (status.toString() == "IN_PROGRESS")
             this.status = Status.ACCEPTED;
+    }
+
+    public void removeFromShoppingCart(String productID)
+    {
+        for (int i = 0; i < inCart.size(); i++)
+        {
+            if (productID.equals(inCart.get(i).getID()))
+            {
+                inCart.remove(i);
+            }
+        }
     }
 }

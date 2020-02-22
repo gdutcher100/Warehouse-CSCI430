@@ -4,7 +4,7 @@ import java.io.*;
 public class Client implements Serializable
 {
     private static final long serialVersionUID = 1L;
-    private static final String CLIENT_STRING = "S";
+    private static final String CLIENT_STRING = "C";
     private String clientID;
     private String clientName;
     private ShoppingCart shoppingCart = new ShoppingCart();
@@ -159,5 +159,10 @@ public class Client implements Serializable
     public List<String> getInvoiceList()
     {
         return invoice;
+    }
+
+    public void editShoppingCart(int quantity)
+    {
+       // shoppingCart
     }
 }

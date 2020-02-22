@@ -283,15 +283,29 @@ public class Warehouse
     // Prints contents of client's cart
     public void trackClientCart(String clientID)
     {
-        if (clientList.getClient(clientID).getShoppingCart().getStatus() == "NULL")
+        try
         {
-            System.out.println("List of products in cart:");
-
-            Iterator<Product> products = clientList.getClient(clientID).getCartContents();
-            while (products.hasNext())
+            if (clientList.getClient(clientID).getShoppingCart().getStatus() == "NULL")
             {
-                System.out.println(products.next());
+                Iterator<Product> products = clientList.getClient(clientID).getCartContents();
+
+                if (products == null)
+                {
+                    System.out.println("Shopping cart is empty.");
+                }
+                else
+                {
+                    System.out.println("List of products in cart:");
+
+                    while (products.hasNext())
+                    {
+                        System.out.println(products.next());
+                    }
+                }
             }
+        } catch (NullPointerException npe)
+        {
+            System.out.println("Client not found.");
         }
     }
 
@@ -438,6 +452,33 @@ public class Warehouse
                     clientList.getClient(clientID).generateInvoice();
                 }
             }
+        }
+    }
+
+    public boolean editShoppingCart(String clientID, String productID, int quantity) 
+    {
+        if (clientList.getClient(clientID).getShoppingCart().verifyProductExists(productID))
+        {
+            clientList.getClient(clientID).getShoppingCart().setQuantity(productID, quantity);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    public boolean removeFromShoppingCart(String clientID, String productID)
+    {
+        if (clientList.getClient(clientID).getShoppingCart().verifyProductExists(productID))
+        {
+            clientList.getClient(clientID).getShoppingCart().removeFromShoppingCart(productID);
+            return true;
+        }
+
+        else
+        {
+            return false;
         }
     }
 }
