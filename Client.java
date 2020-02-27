@@ -7,6 +7,7 @@ public class Client implements Serializable
     private static final String CLIENT_STRING = "C";
     private String clientID;
     private String clientName;
+	private String balance;
     private ShoppingCart shoppingCart = new ShoppingCart();
     private ShoppingCart order = new ShoppingCart();
     private List<String> invoice = new LinkedList<String>();
@@ -28,10 +29,11 @@ public class Client implements Serializable
         }
     }
 
-    public Client(String clientName)
+    public Client(String clientName, String balance)
     {
         clientID = CLIENT_STRING + (IDServer.instance()).getID();
         this.clientName = clientName;
+		this.balance = balance;
     }
 
     public void setClientID(String clientID)
@@ -43,6 +45,11 @@ public class Client implements Serializable
     {
         this.clientName = clientName;
     }
+	
+	public void addToBalance(String charge)
+    {
+        balance = charge;
+    }
 
     public String getID()
     {
@@ -53,10 +60,15 @@ public class Client implements Serializable
     {
         return clientName;
     }
+	
+	public String getClientBalance()
+    {
+        return balance;
+    }
 
     public String toString()
     {
-        return "ID: " + clientID + " Name: " + clientName;
+        return "ID: " + clientID + " Name: " + clientName + " Balance: " + balance;
     }
 
     public void addToCart(Product product, int quantity)
@@ -165,4 +177,32 @@ public class Client implements Serializable
     {
        // shoppingCart
     }
+	
+	public String updateBalance()
+	{
+		this.balance = balance;
+		
+		for (int i = 0; i < order.getCartList().size(); i++)
+        {
+            balance += getTotalCost();
+        }
+		return balance;
+	}
+	
+	public Boolean makePayment(String payment)
+	{
+		//this.balance = balance;
+		//float bal = getTotalCost();
+		float bal = Float.parseFloat(balance);
+		float pay = Float.parseFloat(payment);
+		if(pay <= bal)
+		{
+			bal -= pay;
+			balance = String.valueOf(bal);
+			return true;
+		}
+		
+		else
+			return false;
+	}
 }

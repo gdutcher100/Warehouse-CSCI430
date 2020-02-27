@@ -118,7 +118,7 @@ public class userInterface
         warehouse.addProduct(pName, bPrice, currentStock);
         System.out.println("Product " + pName + " has been added.");
     }
-	// Adds a supplier to the SoldBy list of a product
+	//Adds a supplier to the SoldBy list of a product
     private static void addProductSeller() {
 		String productId;
 		String supplierId;
@@ -178,7 +178,7 @@ public class userInterface
         input = scanner.nextLine();
         cName = input;
 
-        warehouse.addClient(cName);
+        warehouse.addClient(cName,"0");
         System.out.println("Client " + cName + " has been added.");
     }
 
@@ -396,8 +396,8 @@ public class userInterface
             if (warehouse.yesOrNo("Would you like to load the client list? (Y or N)")) {
                 warehouse.loadClientListToUI();
             } else {
-                warehouse.insertClient("Client1");
-                warehouse.insertClient("Client2");
+                warehouse.insertClient("Client1","10");
+                warehouse.insertClient("Client2","20");
                 warehouse.addProductToClientCart("C5", "P3", 4);
             }
         } catch (NullPointerException npe)
@@ -463,6 +463,42 @@ public class userInterface
             System.out.println("Could not get waitlist.");
         }
     }
+	
+	private static void makePayment()
+	{
+		Scanner scanner = new Scanner(System.in);
+		String cID;
+		
+		System.out.println("Enter Client ID for payment: ");
+		System.out.println("-->");
+		cID = scanner.nextLine();
+		
+		//client id validation
+		while(warehouse.searchClient(cID) == null)
+		{
+			System.out.println("Client doesn't exist");
+			System.out.println("Enter Client ID for payment: ");
+			System.out.println("-->");
+			cID = scanner.nextLine();
+		}
+		String balance = warehouse.displayBalance(cID);
+		System.out.println("Outstanding Balance: " + balance);
+		
+		String payment;
+		System.out.println("Enter payment amount: ");
+		System.out.println("-->");
+		payment = scanner.nextLine();
+		//float payment = Float.parseFloat(p);
+		while(!warehouse.makePayment(cID, payment)) 
+		{
+		System.out.println("Payment must be less than or equal to outstanding balance, try again: ");
+		System.out.println("Enter payment amount: ");
+		System.out.println("-->");
+		payment = scanner.nextLine();
+		//payment = Float.parseFloat(p);
+		}
+		System.out.println("Payment accepted.");
+	}
     
     private static void generalHelp()
     {
@@ -500,7 +536,8 @@ public class userInterface
         System.out.println("12. List all clients with outstanding balance");
         System.out.println("13. View waitlist of products for a client");
         System.out.println("14. View waitlist of clients for a product");
-        System.out.println("15. Back");
+		System.out.println("15. Make Payment for a client");
+        System.out.println("16. Back");
     }
 
     private static void productHelp()
@@ -559,6 +596,9 @@ public class userInterface
                 getWaitlistForClients();
                 break;
             case "15":
+                makePayment();
+				break;
+			case "16":
                 return true;
         }
 

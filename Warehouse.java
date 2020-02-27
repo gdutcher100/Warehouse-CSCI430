@@ -210,9 +210,9 @@ public class Warehouse
     }
 	
 	// Adds a client into ClientList
-    public void addClient(String cName)
+    public void addClient(String cName, String bal)
     {
-        Client cl = new Client(cName);
+        Client cl = new Client(cName, bal);
         clientList.insertClient(cl);
     }
 	
@@ -242,9 +242,9 @@ public class Warehouse
     }
 
     
-    public void insertClient(String clientName)
+    public void insertClient(String clientName, String balance)
     {
-        Client client = new Client(clientName);
+        Client client = new Client(clientName, balance);
         clientList.insertClient(client);
     }
 
@@ -402,20 +402,36 @@ public class Warehouse
 		return productList.getProduct(productID).getWaitlistedClients();
 	}
   
+  
 	//get a list of all clients with outstanding balances
-	public String getOutstandingBalances() 
+	public void getOutstandingBalances() 
 	{
 		Iterator clients = clientList.getClients();
-		String clientBalance = "";
+		//String clientBalance ="";
 		while(clients.hasNext()) {
 		  Client client = (Client)(clients.next());
-		if(client.getTotalCost() > 0.0) {
-			clientBalance += client.toString() + "\n";
+		if(Float.parseFloat(client.getClientBalance()) > 0.0) {
+			System.out.println(client);
 		  }
 		}
-		return clientBalance;
+		//return clientBalance;
 	}
-
+	
+	//displays balance for a client
+	public String displayBalance(String clientID)
+	{
+		Client client = clientList.getClient(clientID);
+		String balance = "Balance: " + client.getClientBalance();
+		return balance;
+	}
+	
+	// Make a payment to a client's outstanding balance
+	public Boolean makePayment(String clientID, String payment) 
+	{
+		Client client = clientList.getClient(clientID);
+		return client.makePayment(payment);
+	}
+	
     public void processOrder(String clientID)
     {
         boolean successful = true;
@@ -450,6 +466,10 @@ public class Warehouse
 
                     // Generate invoice
                     clientList.getClient(clientID).generateInvoice();
+					
+					//updates the balance
+					clientList.getClient(clientID).updateBalance();
+					
                 }
             }
         }
