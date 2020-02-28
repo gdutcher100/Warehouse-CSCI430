@@ -501,4 +501,33 @@ public class Warehouse
             return false;
         }
     }
+	
+	public void processDelivery(String productID, int quantityDelivered)
+	{
+		Scanner scanner = new Scanner(System.in);
+		String choice;
+		Product delivery = productList.getProduct(productID);
+		Iterator<Waitlist> waitlist = delivery.getWaitlistedClients();
+		int curStock = delivery.getCurrentStock();
+		
+		while (waitlist.hasNext()) {
+			Waitlist curItr = waitlist.next();
+			Client client = curItr.getClient();
+			int amtOnHold = curItr.getQuantity();
+			
+			if (amtOnHold < quantityDelivered){
+				System.out.println(waitlist);
+				System.out.print("Fill waitlisted order? (y/n)");
+				choice = scanner.nextLine();
+				choice = choice.toUpperCase();
+				if (choice.equals("Y")) {
+					quantityDelivered = quantityDelivered - amtOnHold;
+					client.removeWaitlist(productID);
+					waitlist.remove();
+				}
+			}
+		}
+		curStock = curStock + quantityDelivered;
+		delivery.setCurrentStock(curStock);
+	}
 }

@@ -419,14 +419,13 @@ public class userInterface
             System.out.println("Product doesn't exist");
             return;
             }
-            Iterator waitlist = warehouse.getWaitlistedClients(pID);
-            Object w;
+            Iterator<Waitlist> waitlist = warehouse.getWaitlistedClients(pID);
             System.out.println("---------------------------------");
             while (waitlist.hasNext())
             {
-            w = waitlist.next();
-            System.out.println(i + ".) Client: " + w);
-            i++;
+				Waitlist curList = waitlist.next();
+				System.out.println(i + " " + curList);
+				i++;
             }
             System.out.println("---------------------------------\n");
         } catch (NullPointerException npe)
@@ -448,13 +447,12 @@ public class userInterface
             System.out.println("Client doesn't exist");
             return;
             }
-            Iterator waitlist = warehouse.getWaitlistedProducts(cID);
-            Object w;
-            System.out.println("---------------------------------");
-            while (waitlist.hasNext())
+				Iterator<Waitlist> waitlist = warehouse.getWaitlistedProducts(cID);
+				System.out.println("---------------------------------");
+				while (waitlist.hasNext())
             {
-            w = waitlist.next();
-            System.out.println(i + ".) Product: " + w);
+				Waitlist curList = waitlist.next();
+            System.out.println(i + " " + curList);
             i++;
             }
             System.out.println("---------------------------------\n");
@@ -498,6 +496,34 @@ public class userInterface
 		//payment = Float.parseFloat(p);
 		}
 		System.out.println("Payment accepted.");
+	}
+	
+	private static void processShipment(){
+		Scanner scanner = new Scanner(System.in);
+		String pID;
+		String input;
+		int amt;
+		Boolean done = false;
+		
+		while(!done){
+			System.out.print("Enter the ID of the next product on the delivery: ");
+			pID = scanner.nextLine();
+			System.out.print("Enter the amount delivered: ");
+			input = scanner.nextLine();
+			amt = Integer.parseInt(input);
+		
+			if(warehouse.searchProduct(pID) == null){
+				System.out.print("No such product.");
+			} else {
+				warehouse.processDelivery(pID, amt);
+			}
+			System.out.print("More products on delivery? (y/n) ");
+			input = scanner.nextLine();
+			input = input.toUpperCase();
+			if (input.equals("N")){
+				done = true;
+			}
+		}	
 	}
     
     private static void generalHelp()
@@ -546,7 +572,8 @@ public class userInterface
         System.out.println("2. Edit Product Information");
         System.out.println("3. Add Product");
         System.out.println("4. Save Product List");
-        System.out.println("5. Back");
+		System.out.println("5. Process Shipment Delivery");
+        System.out.println("6. Back");
     }
 
     private static boolean clientSwitch(String input)
@@ -590,10 +617,10 @@ public class userInterface
                 warehouse.getOutstandingBalances();
                 break;
             case "13":
-                getWaitlistForProducts();
+                getWaitlistForClients();
                 break;
             case "14":
-                getWaitlistForClients();
+                getWaitlistForProducts();
                 break;
             case "15":
                 makePayment();
@@ -650,7 +677,10 @@ public class userInterface
             case "4":
                 warehouse.saveProductList();
                 break;
-            case "5":
+			case "5":
+				processShipment();
+				break;
+            case "6":
                 return true;
         }
 

@@ -70,6 +70,21 @@ public class Client implements Serializable
     {
         return "ID: " + clientID + " Name: " + clientName + " Balance: " + balance;
     }
+	
+	public boolean removeWaitlist(String productID)
+	{
+		Iterator<Waitlist> itr = waitlistedProducts.iterator();
+		String wlID;
+		while (itr.hasNext()) {
+			Waitlist curWaitlist = itr.next();
+			wlID = curWaitlist.getProduct().getID();
+			if (wlID == productID) {
+				itr.remove();
+				return true;
+			}
+		}
+		return false;
+	}
 
     public void addToCart(Product product, int quantity)
     {

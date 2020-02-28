@@ -13,15 +13,19 @@ public class Waitlist implements Serializable {
     this.quantity = q;
   }
 
-  public Product getProduct(){
+  public Product getProduct() {
     return product;
   }
 
-  public Client getClient(){
+  public Client getClient() {
     return client;
   }
 
-  public int getQuantity(){
+  public int getQuantity() {
     return quantity;
+  }
+  
+  public String toString() {
+	  return ("Client: " + client + " Product: " + product + " Amount: " + quantity);
   }
 }

@@ -7,10 +7,10 @@ public class Product implements Serializable
 	private String productID;
 	private String productName;
 	private static final String PRODUCT_STRING = "P";
-	private List<SoldBy> sellingSuppliers = new LinkedList<SoldBy>();
+	private int quantity;
 	private float buyPrice;
 	private int currentStock;
-	private int quantity;
+	private List<SoldBy> sellingSuppliers = new LinkedList<SoldBy>();
 	private List<Waitlist> waitlistedClients = new LinkedList<Waitlist>();
 
 	
@@ -84,7 +84,7 @@ public class Product implements Serializable
 
 	public String toString()
 	{
-		return "ID: " + productID + " Name: " + productName + " Buy Price: " + 
-		buyPrice + " Current Stock: " + currentStock + " Quantity: " + quantity;
+		return ("ID: " + productID + " Name: " + productName + " Buy Price: " + 
+		buyPrice + " Current Stock: " + currentStock);
 	}
 }
