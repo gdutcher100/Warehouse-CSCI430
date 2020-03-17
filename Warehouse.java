@@ -208,6 +208,11 @@ public class Warehouse
             ioe.printStackTrace();
         }
     }
+
+    public String getClientID(String name)
+    {
+        return clientList.getClientID(name).getName();
+    }
 	
 	// Adds a client into ClientList
     public void addClient(String cName, String bal)
@@ -297,9 +302,14 @@ public class Warehouse
                 {
                     System.out.println("List of products in cart:");
 
-                    while (products.hasNext())
+                    for (int i = 0; i < clientList.getClient(clientID).getShoppingCart().getSize(); i++)
                     {
-                        System.out.println(products.next());
+                        String productID = clientList.getClient(clientID).getShoppingCart().getProductID(i);
+                        String productName = clientList.getClient(clientID).getShoppingCart().getProductName(i);
+                        int quantity = clientList.getClient(clientID).getShoppingCart().getQuantity(i);
+                        float price = clientList.getClient(clientID).getShoppingCart().getBuyPrice(i);
+
+                        System.out.println("ProductID: " + productID + " Name: " + productName + " Quantity: " + quantity + " Price: " + price);
                     }
                 }
             }
@@ -415,6 +425,12 @@ public class Warehouse
 		  }
 		}
 		//return clientBalance;
+    }
+    
+    //get a list of all clients with outstanding balances
+	public void getOutstandingBalance(String clientID) 
+	{
+        System.out.println("Outstanding Balance: " + clientList.getClient(clientID).getClientBalance());
 	}
 	
 	//displays balance for a client

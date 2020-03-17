@@ -35,6 +35,18 @@ public class ClientList implements Serializable
         return null;
     }
 
+    public Client getClientID(String clientName)
+    {
+        for (int i = 0; i < clients.size(); i++)
+        {
+            if (clients.get(i).getName().equals(clientName))
+            {
+                return clients.get(i);
+            }
+        }
+        return null;
+    }
+
     // Inserts client in list
     public boolean insertClient(Client client) 
     {
