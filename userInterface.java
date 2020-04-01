@@ -14,8 +14,6 @@ public class userInterface
 
     private static void placeOrder()
     {
-        Scanner scanner = new Scanner(System.in);
-
         try
         {
             warehouse.placeOrder(clientID);
@@ -130,8 +128,6 @@ public class userInterface
 
     private static void trackClientOrders()
     {
-        Scanner scanner = new Scanner(System.in);
-
         try
         {
             warehouse.trackClientOrder(clientID);
@@ -141,10 +137,63 @@ public class userInterface
         }
     }
 
+    //waitlist of products for a client
+	private static void getWaitlistForClients()
+	{
+        try
+        {
+            Client c = warehouse.searchClient(clientID);
+            int i = 1;
+            if (c == null)
+            {
+            System.out.println("Client doesn't exist");
+            return;
+            }
+				Iterator<Waitlist> waitlist = warehouse.getWaitlistedProducts(clientID);
+				System.out.println("---------------------------------");
+				while (waitlist.hasNext())
+            {
+				Waitlist curList = waitlist.next();
+            System.out.println(i + " " + curList);
+            i++;
+            }
+            System.out.println("---------------------------------\n");
+        } catch (NullPointerException npe)
+        {
+            System.out.println("Could not get waitlist.");
+        }
+    }
+
+    //waitlist of clients for a product
+	private static void getWaitlistForProducts()
+	{
+        try
+        {
+            String pID = warehouse.getToken("Enter product ID: ");
+            Product p = warehouse.searchProduct(pID);
+            int i = 1;
+            if (p == null)
+            {
+            System.out.println("Product doesn't exist");
+            return;
+            }
+            Iterator<Waitlist> waitlist = warehouse.getWaitlistedClients(pID);
+            System.out.println("---------------------------------");
+            while (waitlist.hasNext())
+            {
+				Waitlist curList = waitlist.next();
+				System.out.println(i + " " + curList);
+				i++;
+            }
+            System.out.println("---------------------------------\n");
+        } catch (NullPointerException npe)
+        {
+            System.out.println("Could not get waitlist.");
+        }
+	}
+
     private static void viewClientInvoice()
     {
-        Scanner scanner = new Scanner(System.in);
-
         try
         {
             warehouse.viewClientInvoice(clientID);
@@ -204,7 +253,8 @@ public class userInterface
         System.out.println("4. Edit Cart");
         System.out.println("5. Add Product To Cart");
         System.out.println("6. View Products");
-        System.out.println("7. Logout");
+        System.out.println("7. View Waitlist");
+        System.out.println("8. Logout");
     }
 
     private static boolean clientSwitch(String input)
@@ -262,6 +312,9 @@ public class userInterface
                 warehouse.trackProductInformation();
                 break;
             case "7":
+                getWaitlistForClients();
+                break;
+            case "8":
                 back = true;
                 break;
         }
@@ -274,7 +327,18 @@ public class userInterface
         {
             return true;
         }
+    }
 
+    private static void loadLists() {
+        try
+        {
+            warehouse.loadSupplierListToUI();
+            warehouse.loadProductListToUI();
+            warehouse.loadClientListToUI();
+        } catch (NullPointerException npe)
+        {
+            System.out.println("Could not load list");
+        }
     }
 
     public static void main(String[] s) 
@@ -287,9 +351,11 @@ public class userInterface
         String user;
         String pass;
 
-        warehouse.addClient("C1", "100");
+        loadLists();
 
-        warehouse.addProduct("P1", 30, 4);
+        /*warehouse.addProduct("Computer", 700, 20);
+
+        warehouse.saveProductList();*/
 
         while (!quit) 
         {
