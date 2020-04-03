@@ -12,7 +12,80 @@ public class userInterface
     private static String username;
     private static String clientID;
 
-    private static void placeOrder()
+    private static void processShipment(){
+		Scanner scanner = new Scanner(System.in);
+		String pID;
+		String input;
+		int amt;
+		Boolean done = false;
+		
+		while(!done){
+			System.out.print("Enter the ID of the next product on the delivery: ");
+			pID = scanner.nextLine();
+			System.out.print("Enter the amount delivered: ");
+			input = scanner.nextLine();
+			amt = Integer.parseInt(input);
+		
+			if(warehouse.searchProduct(pID) == null){
+				System.out.print("No such product.");
+			} else {
+				warehouse.processDelivery(pID, amt);
+			}
+			System.out.print("More products on delivery? (y/n) ");
+			input = scanner.nextLine();
+			input = input.toUpperCase();
+			if (input.equals("N")){
+				done = true;
+				break;
+			}
+		}	
+	}
+	
+	private static void addClient() {
+        String cName;
+        String input;
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("What is the name of the client?");
+        System.out.print("-->");
+        input = scanner.nextLine();
+        cName = input;
+
+        warehouse.addClient(cName,"0");
+        System.out.println("Client " + cName + " has been added.");
+    }
+	
+	private static void actAsClient() {
+		boolean back = false;
+		
+		while (!back)
+                    {
+                        userType = UserType.CLIENT;
+
+                        System.out.print("Username: ");
+                        user = scanner.next();
+
+                        System.out.print("Password: ");
+                        pass = scanner.next();
+
+                        if (loginVerify(userType, user, pass))
+                        {
+                            while (!back)
+                            {
+                                clientHelp();
+
+                                System.out.print("-->");
+                                input = scanner.next();
+                                System.out.println("");
+
+                                back = clientSwitch(input);
+                            }
+                        }
+                    }
+	}
+	
+	
+	private static void placeOrder()
     {
         try
         {
@@ -329,6 +402,61 @@ public class userInterface
         }
     }
 
+	private static void clerkHelp()
+	{
+		System.out.println("");
+        System.out.println("1. Add New Client");
+        System.out.println("2. Show Product List");
+        System.out.println("3. Show Client List");
+        System.out.println("4. Show Clients With Outstanding Balance");
+        System.out.println("5. Access Client Account");
+        System.out.println("6. Display Product Waitlist");
+        System.out.println("7. Receive Shipment");
+        System.out.println("8. Logout");
+	}
+
+	private static boolean clerkSwitch(String input)
+	{
+		Scanner scanner = new Scanner(System.in);
+        boolean back = false;
+		
+		switch (input)
+		{
+			case "1":
+				addClient();
+				break;
+			case "2":
+				warehouse.trackProductInformation();
+				break;
+			case "3":
+				warehouse.trackClientInformation();
+				break;
+			case "4":
+				warehouse.trackClientsWithDues();
+				break;
+			case "5":
+				actAsClient();
+				break;
+			case "6":
+				getWaitlistForProducts();
+				break;
+			case "7":
+				processShipment();
+				break;
+			case "8":
+				back = true;
+				break;
+		}
+		if (!back)
+        {
+            return false;
+        } 
+        else
+        {
+            return true;
+        }
+	}
+
     private static void loadLists() {
         try
         {
@@ -354,7 +482,6 @@ public class userInterface
         loadLists();
 
         /*warehouse.addProduct("Computer", 700, 20);
-
         warehouse.saveProductList();*/
 
         while (!quit) 
@@ -440,13 +567,13 @@ public class userInterface
 
                         while (!back)
                         {
-                            // salespersonHelp() goes here
-
+                            clerkHelp();
+							
                             System.out.print("-->");
                             input = scanner.next();
                             System.out.println("");
 
-                            // back = salespersonSwitch(input); goes here
+                            back = clerkSwitch();
                         }
                     }
                     break;

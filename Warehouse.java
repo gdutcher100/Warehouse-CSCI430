@@ -284,6 +284,21 @@ public class Warehouse
             System.out.println(clients.next());
         }
     }
+	
+	public void trackClientsWithDues()
+	{
+		System.out.println("List of clients with outstanding balance:");
+
+        Iterator<Client> clients = clientList.getClients();
+        while (clients.hasNext())
+        {
+			Client c = clients.next();
+			if (c.getClientBalance() > 0.00)
+			{
+				System.out.println(clients.next());
+			}
+        }
+	}
 
     // Prints contents of client's cart
     public void trackClientCart(String clientID)
