@@ -12,20 +12,21 @@ public class userInterface
     private static String username;
     private static String clientID;
 
+
     private static void processShipment(){
 		Scanner scanner = new Scanner(System.in);
 		String pID;
 		String input;
 		int amt;
 		Boolean done = false;
-		
+
 		while(!done){
 			System.out.print("Enter the ID of the next product on the delivery: ");
 			pID = scanner.nextLine();
 			System.out.print("Enter the amount delivered: ");
 			input = scanner.nextLine();
 			amt = Integer.parseInt(input);
-		
+
 			if(warehouse.searchProduct(pID) == null){
 				System.out.print("No such product.");
 			} else {
@@ -40,7 +41,7 @@ public class userInterface
 			}
 		}	
 	}
-	
+
 	private static void addClient() {
         String cName;
         String input;
@@ -54,10 +55,15 @@ public class userInterface
         warehouse.addClient(cName,"0");
         System.out.println("Client " + cName + " has been added.");
     }
-	
+
 	private static void actAsClient() {
-		boolean back = false;
-		
+        boolean back = false;
+        Scanner scanner = new Scanner(System.in);
+        String input;
+
+        String user;
+        String pass;
+
 		while (!back)
                     {
                         userType = UserType.CLIENT;
@@ -83,9 +89,8 @@ public class userInterface
                         }
                     }
 	}
-	
-	
-	private static void placeOrder()
+
+    private static void placeOrder()
     {
         try
         {
@@ -173,6 +178,7 @@ public class userInterface
         {
             System.out.println("Invalid input");
         }
+        scanner.close();
     }
 
     // Adds a product to the specified client's cart
@@ -197,6 +203,7 @@ public class userInterface
         {
             System.out.println("Could not add product to client cart.");
         }
+        scanner.close();
     }
 
     private static void trackClientOrders()
@@ -329,6 +336,176 @@ public class userInterface
         System.out.println("7. View Waitlist");
         System.out.println("8. Logout");
     }
+	
+	
+	// Adds a supplier 
+    private static void addSupplier()
+    {
+        String sName;
+        String input;
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("What is the name of the supplier?");
+        System.out.print("-->");
+        input = scanner.nextLine();
+        sName = input;
+
+        warehouse.addSupplier(sName);
+        System.out.println("Supplier " + sName + " has been added.");
+    }
+
+    // Add a product 
+	private static void addProduct()
+	{
+		String pName;
+        float bPrice;
+        int currentStock;
+		String input;
+		Scanner scanner = new Scanner(System.in);
+		
+		System.out.println("What is the name of the product?");
+        System.out.print("-->");
+        input = scanner.nextLine();
+        pName = input;
+
+        System.out.println("What is the buy price of the product?");
+        System.out.print("-->");
+        input = scanner.nextLine();
+        bPrice = Float.parseFloat(input);
+
+        System.out.println("What is the quantity of the product?");
+        System.out.print("-->");
+        input = scanner.nextLine();
+        currentStock = Integer.parseInt(input);
+
+        warehouse.addProduct(pName, bPrice, currentStock);
+        System.out.println("Product " + pName + " has been added.");
+    }
+	
+	//Adds a supplier for a product
+    private static void addProductSeller() {
+		String productId;
+		String supplierId;
+		float buyPrice;
+		String input;
+		Scanner scanner = new Scanner(System.in);
+        
+        try
+        {
+            System.out.println("Enter the ID of the product for which there is a new Supplier. ");
+            System.out.print("-->");
+            productId = scanner.nextLine();
+            
+            System.out.println("Enter the ID of the Supplier that now sells the product.");
+            System.out.print("-->");
+            supplierId = scanner.nextLine();
+            
+            System.out.println("Enter the purchase price of the product from this supplier.");
+            System.out.print("-->");
+            input = scanner.nextLine();
+            buyPrice = Float.parseFloat(input);
+            
+            warehouse.addToSellingSuppliers(productId, supplierId, buyPrice);	
+            System.out.println("Seller for product " + productId + " updated.");
+        } catch (NullPointerException npe)
+        {
+            System.out.println("Could not add product seller.");
+        }
+	}
+	
+	// Displays sellers for a product
+	private static void trackProductSellers() {
+		String productId;
+		Scanner scanner = new Scanner(System.in);
+        
+        try
+        {
+            System.out.println("Enter the ID of the product whose sellers you wish to display.");
+            System.out.print("-->");
+            productId = scanner.nextLine();
+            
+            warehouse.trackProductSellers(productId);
+        } catch (NullPointerException npe)
+        {
+            System.out.println("Product not found.");
+        }
+	}
+	
+	
+	// Displays products for a seller
+	/* need to write code */
+	
+	//Modify product price
+	private static void editProductPrice()
+    {
+        String ID;
+        float newPrice;
+        Scanner scanner = new Scanner(System.in);
+
+        try
+        {
+            System.out.println("Input ID of the product you want to edit price for: ");
+            System.out.print("-->");
+            ID = scanner.nextLine();
+
+            System.out.println("Input new price for product: ");
+            System.out.print("-->");
+            newPrice = scanner.nextInt();
+
+            warehouse.editProductPrice(ID, newPrice);
+        } catch (NullPointerException npe)
+        {
+            System.out.println("Product not found.");
+        }
+    }
+	
+	
+    //become a salesclerk
+    private static void becomeSalesClerk()
+    {
+        Scanner scanner = new Scanner(System.in);
+        boolean back = false;
+        String input;
+
+        String user;
+        String pass;
+        while (!back)
+                    {
+                        userType = UserType.SALESPERSON;
+
+                        System.out.print("Username: ");
+                        user = scanner.next();
+
+                        System.out.print("Password: ");
+                        pass = scanner.next();
+
+                    
+                        while (!back)
+                        {
+                            clerkHelp();
+                                
+                            System.out.print("-->");
+                            input = scanner.next();
+                            System.out.println("");
+                            back = clerkSwitch(input);
+                        }
+                    }
+    }
+	
+	
+	private static void managerHelp()
+    {
+        System.out.println("");
+        System.out.println("1. Add a product");
+        System.out.println("2. Add a supplier");
+        System.out.println("3. Show list of suppliers");
+        System.out.println("4. Show list of suppliers for a product");
+        System.out.println("5. Show list of products for a supplier");
+        System.out.println("6. Add a supplier for a product");
+        System.out.println("7. Modify product price");
+        System.out.println("8. Become a salesclerk");
+		System.out.println("9. Logout");
+    }
 
     private static boolean clientSwitch(String input)
     {
@@ -401,8 +578,56 @@ public class userInterface
             return true;
         }
     }
+	
+	private static boolean managerSwitch(String input)
+    {
+        Scanner scanner = new Scanner(System.in);
+        boolean back = false;
 
-	private static void clerkHelp()
+        switch (input)
+        {
+            case "1":
+                addProduct();
+                break;
+            case "2":
+                addSupplier();
+                break;
+            case "3":
+                warehouse.trackSupplierInformation();
+                break;
+            case "4":
+                trackProductSellers();
+                break;
+            case "5":
+                //need to write code here
+                break;
+            case "6":
+                addProductSeller();
+                break;
+            case "7":
+                editProductPrice();
+                break;
+			case "8":
+				becomeSalesClerk();
+				break;
+            case "9":
+                back = true;
+                break;
+        }
+        scanner.close();
+
+        if (!back)
+        {
+            return false;
+        } 
+        else
+        {
+            return true;
+        }
+    }
+
+
+    private static void clerkHelp()
 	{
 		System.out.println("");
         System.out.println("1. Add New Client");
@@ -419,7 +644,7 @@ public class userInterface
 	{
 		Scanner scanner = new Scanner(System.in);
         boolean back = false;
-		
+
 		switch (input)
 		{
 			case "1":
@@ -457,6 +682,7 @@ public class userInterface
         }
 	}
 
+
     private static void loadLists() {
         try
         {
@@ -482,6 +708,7 @@ public class userInterface
         loadLists();
 
         /*warehouse.addProduct("Computer", 700, 20);
+
         warehouse.saveProductList();*/
 
         while (!quit) 
@@ -543,13 +770,12 @@ public class userInterface
                         {
                             while (!back)
                             {
-                                // managerHelp() goes here
-
+                                managerHelp();
                                 System.out.print("-->");
                                 input = scanner.next();
                                 System.out.println("");
 
-                                // back = managerSwitch(input); goes here
+                                back = managerSwitch(input); 
                             }
                         }
                     }
@@ -568,12 +794,12 @@ public class userInterface
                         while (!back)
                         {
                             clerkHelp();
-							
+
                             System.out.print("-->");
                             input = scanner.next();
                             System.out.println("");
 
-                            back = clerkSwitch();
+                            back = clerkSwitch(input);
                         }
                     }
                     break;
@@ -582,5 +808,6 @@ public class userInterface
                     break;
             }
         }
+		scanner.close();
     }
 }

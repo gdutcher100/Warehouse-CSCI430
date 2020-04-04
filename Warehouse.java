@@ -195,6 +195,14 @@ public class Warehouse
         product.setProductName(productName);
     }
 	
+	
+	public void editProductPrice(String ProductID, float buyPrice)
+    {
+        Product product = productList.getProduct(ProductID);
+        product.setBuyPrice(buyPrice);
+    }
+	
+	
 	// Saves the ProductList object to ProductListData file
     public void saveProductList()
     {
@@ -284,8 +292,8 @@ public class Warehouse
             System.out.println(clients.next());
         }
     }
-	
-	public void trackClientsWithDues()
+
+    public void trackClientsWithDues()
 	{
 		System.out.println("List of clients with outstanding balance:");
 
@@ -293,12 +301,13 @@ public class Warehouse
         while (clients.hasNext())
         {
 			Client c = clients.next();
-			if (c.getClientBalance() > 0.00)
+			if (Float.parseFloat(c.getClientBalance()) > 0.00)
 			{
 				System.out.println(clients.next());
 			}
         }
 	}
+
 
     // Prints contents of client's cart
     public void trackClientCart(String clientID)
